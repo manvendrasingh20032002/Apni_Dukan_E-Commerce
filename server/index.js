@@ -23,7 +23,7 @@ app.use("/api", Router)
 
 
 app.use((req, res) => {
-    express.static(path.join(__dirname, 'dist'))
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'))
 });
 
 
