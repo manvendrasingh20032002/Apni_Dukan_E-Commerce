@@ -1,0 +1,116 @@
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+
+
+import FormValidators from '../../../Validators/FormValidators'
+import ImageValidators from '../../../Validators/ImageValidators'
+
+import AdminSidebar from '../../../Components/Admin/AdminSidebar'
+
+import { getSubcategory, updateSubcategory } from "../../../Redux/ActionCreators/SubcategoryActionCreators"
+export default function AdminUpdateSubcategoryPage() {
+    let { _id } = useParams()
+    let [data, setData] = useState({
+        name: "",
+        pic: "",
+        status: true
+    })
+    let [errorMessage, setErrorMessage] = useState({
+        name: "",
+        pic: ""
+    })
+    let [show, setShow] = useState(false)
+    let navigate = useNavigate()
+
+    let SubcategoryStateData = useSelector(state => state.SubcategoryStateData)
+    let dispatch = useDispatch()
+
+
+    function getInputData(e) {
+        let name = e.target.name
+        // let value = name === "pic" ? "subcategory/" + e.target.files[0].name : e.target.value
+        let value = name === "pic" ? e.target.files[0] : e.target.value
+
+        setData({ ...data, [name]: name === "status" ? (value === "1" ? true : false) : value })
+        setErrorMessage({ ...errorMessage, [name]: name === "pic" ? ImageValidators(e) : FormValidators(e) })
+    }
+    function postData(e) {
+        e.preventDefault()
+        let error = Object.values(errorMessage).find(x => x !== "")
+        if (error)
+            setShow(true)
+        else {
+            let item = SubcategoryStateData.find(x => x._id !== _id && (x.name.toLocaleLowerCase() === data.name.toLocaleLowerCase()))
+            if (item) {
+                setErrorMessage({ ...errorMessage, name: "Subcategory With This Name Already Exist" })
+                setShow(true)
+                return
+            }
+            // dispatch(updateSubcategory({ ...data }))
+
+            let formData = new FormData()
+            formData.append("_id", data._id)
+            formData.append("name", data.name)
+            formData.append("pic", data.pic)
+            formData.append("status", data.status)
+            dispatch(updateSubcategory(formData))
+
+            navigate("/admin/subcategory")
+        }
+    }
+
+    useEffect(() => {
+        (() => {
+            dispatch(getSubcategory())
+            if (SubcategoryStateData.length) {
+                let item = SubcategoryStateData.find(x => x._id === _id)
+                if (item)
+                    setData({ ...data, ...item })
+                else
+                    navigate("/admin/subcategory")
+            }
+        })()
+    }, [SubcategoryStateData.length])
+    return (
+        <>
+            <div className="container-fluid my-3">
+                <div className="row">
+                    <div className="col-md-3">
+                        <AdminSidebar />
+                    </div>
+                    <div className="col-md-9">
+                        <h6 className='mybackground text-light text-center p-2 fs-1 mb-3'>Update Subcategory
+                            <Link to="/admin/subcategory"><i className='bi bi-arrow-left text-light fs-1 float-end'></i></Link>
+                        </h6>
+                        <form onSubmit={postData}>
+                            <div className="row">
+                                <div className="col-12 mb-5">
+                                    <label>Name*</label>
+                                    <input type="text" name="name" value={data.name} onChange={getInputData} placeholder='Subcategory Name' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'myborder'}`} />
+                                    {show && errorMessage.name ? <p className='text-danger'>{errorMessage.name}</p> : null}
+                                </div>
+                                <div className="col-md-6 mb-5">
+                                    <label>Pic</label>
+                                    <input type="file" name="pic" onChange={getInputData} className={`form-control ${show && errorMessage.pic ? 'border-danger' : 'myborder'}`} />
+                                    {show && errorMessage.pic ? <p className='text-danger'>{errorMessage.pic}</p> : null}
+                                </div>
+                                <div className="col-md-6 mb-5">
+                                    <label>Status*</label>
+                                    <select name="status" value={data.status ? "1" : "0"} onChange={getInputData} className='form-select myborder'>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                                <div className="col-12 mb-5">
+                                    <button className='btn btn-primary btn-lg w-100 mybackground p-3'>Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div style={{ height: 100 }}></div>
+        </>
+    )
+}
