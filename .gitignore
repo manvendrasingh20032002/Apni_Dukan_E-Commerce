@@ -3,5 +3,5 @@ node_modules/
 *.log
 .DS_Store
 dist/
-# Ignore backup JSON files in root
-*.json
+# Ignore backup JSON files in root only
+/apnidukan.*.json
