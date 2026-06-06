@@ -173,7 +173,7 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="header-favourite">
-                  <Link to="/profile?option=wishlist" className="cart-item">
+                  <Link to={localStorage.getItem("login") ? "/profile?option=wishlist" : "/login"} className="cart-item">
                     <span>
                       <i className='bi bi-heart fs-3'></i>
                     </span>
@@ -183,7 +183,7 @@ export default function Navbar() {
                   </Link>
                 </div>
                 <div className="header-cart">
-                  <Link to="/cart" className="cart-item">
+                  <Link to={localStorage.getItem("login") ? "/cart" : "/login"} className="cart-item">
                     <span>
                       <i className='bi bi-cart fs-2'></i>
                     </span>
@@ -222,14 +222,14 @@ export default function Navbar() {
                         <h5 className="wrapper-title">&#8377;{subtotal}</h5>
                       </div>
                       <div className="cart-btn">
-                        <Link to="/cart" className="shop-btn view-btn">View Cart</Link>
-                        <Link to="/checkout" className="shop-btn checkout-btn">Checkout Now</Link>
+                        <Link to={localStorage.getItem("login") ? "/cart" : "/login"} className="shop-btn view-btn">View Cart</Link>
+                        <Link to={localStorage.getItem("login") ? "/checkout" : "/login"} className="shop-btn checkout-btn">Checkout Now</Link>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="header-user me-3">
-                  <Link to="/profile">
+                  <Link to={localStorage.getItem("login") ? "/profile" : "/login"}>
                     <span>
                       <i className='bi bi-person fs-1'></i>
                     </span>
@@ -250,11 +250,11 @@ export default function Navbar() {
             </Link>
 
             <div>
-              <Link to="/profile?option=wishlist" className="header-cart cart-item me-4">
+              <Link to={localStorage.getItem("login") ? "/profile?option=wishlist" : "/login"} className="header-cart cart-item me-4">
                 <i className='bi bi-heart fs-1'></i>
                 <span className='ms-2'>Wishlist</span>
               </Link>
-              <Link to="/cart" className="header-cart cart-item me-3">
+              <Link to={localStorage.getItem("login") ? "/cart" : "/login"} className="header-cart cart-item me-3">
                 <i className='bi bi-cart fs-1'></i>
                 <span className='ms-2'>Cart</span>
               </Link>
@@ -268,11 +268,11 @@ export default function Navbar() {
                 <div className="header-cart ">
                   <div className="header-compaire">
                     <div className='d-flex'>
-                      <Link to="/profile?option=Wishlist" className="header-cart cart-item me-2">
+                      <Link to={localStorage.getItem("login") ? "/profile?option=Wishlist" : "/login"} className="header-cart cart-item me-2">
                         <i className='bi bi-heart fs-1' style={{ marginRight: "-10px" }}></i>
                         <span>Wishlist</span>
                       </Link>
-                      <Link to="/cart" className="header-cart cart-item me-3">
+                      <Link to={localStorage.getItem("login") ? "/cart" : "/login"} className="header-cart cart-item me-3">
                         <i className='bi bi-cart fs-1' style={{ marginRight: "-10px" }}></i>
                         <span>Cart</span>
                       </Link>

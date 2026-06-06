@@ -54,6 +54,10 @@ export default function ProductPage() {
     }
 
     function addToCart() {
+        if (!localStorage.getItem("login")) {
+            navigate("/login")
+            return
+        }
         let item = CartStateData.find(x => x.user?._id === localStorage.getItem("userid") && x.product?._id === product._id)
         if (!item) {
             item = {
@@ -77,6 +81,10 @@ export default function ProductPage() {
     }
 
     function addToWishlist() {
+        if (!localStorage.getItem("login")) {
+            navigate("/login")
+            return
+        }
         let item = WishlistStateData.find(x => x.user?._id === localStorage.getItem("userid") && x.product?._id === product._id)
         if (!item) {
             item = {
